@@ -1,0 +1,97 @@
+<html><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>
+	* {
+		background-color: #352e2e;
+		font-family: monospace;
+		color: rgb(60, 255, 1);
+		padding: 0px;
+	}
+
+	button,
+	datalist {
+		background-color: rgb(85, 85, 85);
+	}
+
+	input[type=text] {
+		color: rgb(179, 255, 179);
+		background-color: rgb(102, 86, 86);
+		border: 1px solid;
+		border-color: #696 #363 #363 #696;
+	}
+
+	[type="checkbox"] {
+		vertical-align: middle;
+	}
+
+	#serialResults {
+		font-family: monospace;
+		white-space: pre;
+		height: calc(100% - 120px);
+		width: calc(100% - 20px);
+		border-style: solid;
+		overflow: scroll;
+		background-color: rgb(88, 92, 92);
+		padding: 10px;
+		margin: 0px;
+	}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AbuseMark DP Adapter Controller</title>
+</head><body>
+<button onclick="connectSerial()">Connect</button>	
+<br>
+Backlight:
+<button onclick="sendSerial('control bl off')" style="width:45px">Off</button>
+<button onclick="sendSerial('control bl on')" style="width:45px">On</button>
+<input type="range" min="10" max="950" value="500" onchange="sendSerial('brightness=' + value)">
+<button onclick="sendSerial('save')" style="width:45px">Save</button>
+<br>
+DP:
+<button onclick="sendSerial('control dp off')" style="width:45px">Off</button>
+<button onclick="sendSerial('control dp on')" style="width:45px">On</button>
+<br>
+Flash:
+<input type="text" id="flashMs" style="width:45px" value="100"> ms
+<button onclick="sendSerial('strobe ' + flashMs.value)" style="width:45px">Off</button>
+<br>
+<script>
+	var port, textEncoder, writableStreamClosed, writer, historyIndex = -1;
+	const lineHistory = [];
+	async function connectSerial() {
+		try {
+			// Prompt user to select any serial port.
+			port = await navigator.serial.requestPort();
+			await port.open({ baudRate: "9600" });
+			textEncoder = new TextEncoderStream();
+			writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+			writer = textEncoder.writable.getWriter();
+		} catch (e) {
+		error = e.toString();
+		if (error.includes("No port selected")) {
+			alert("No serial port was selected.\n\n" + error	);
+			}
+		else if (error.includes("Failed to open serial port")){
+			alert("Failed to open serial port. Make sure no other software is accessing it.\n\n" + error)
+			}
+		else {
+			alert("An unknown error occured.\n\n" + error)
+			}
+		}
+	}
+	async function sendSerial(data) {
+		dataToSend = data + "\n";
+		try {
+		 await writer.write(dataToSend);
+		 console.log(dataToSend)
+
+		} catch (error) {
+		 alert("Sending command failed. Did you click connect?\n\n" + error);
+		}
+	}
+	
+	document.getElementById("flashMs").addEventListener("keyup", async function (event) {
+        if (event.keyCode === 13) {
+            sendSerial('strobe ' + document.getElementById("flashMs").value);
+        }
+	})
+</script>
+	
