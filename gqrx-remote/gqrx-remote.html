@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="gqrx-remote.css">
+  <script src="gqrx-remote.js"></script>
+</head>
+
+<body>
+  <div class="tab">
+    <button class="tablinks" onclick="switchTab(event, 'Controls')">Controls</button>
+    <button class="tablinks" onclick="switchTab(event, 'Settings')">Settings</button>
+  </div>
+  <div id="Controls" class="tabcontent">
+    <div class="freq_sel_disp">
+      <input type="number" id="freq_display" value="0000000000" style="width: 450px;" disabled><input type="radio"
+        id="knob_freq" name="knob_mode" value="freq" checked />
+      <div class="freq_select">
+        <input type="radio" id="f10" name="freq_digit" value="1000000000">
+        <input type="radio" id="f9" name="freq_digit" value="100000000">
+        <input type="radio" id="f8" name="freq_digit" value="10000000">
+        <input type="radio" id="f7" name="freq_digit" value="1000000">
+        <input type="radio" id="f6" name="freq_digit" value="100000">
+        <input type="radio" id="f5" name="freq_digit" value="10000">
+        <input type="radio" id="f4" name="freq_digit" value="1000">
+        <input type="radio" id="f3" name="freq_digit" value="100">
+        <input type="radio" id="f2" name="freq_digit" value="10">
+        <input type="radio" id="f1" name="freq_digit" value="1" checked />
+      </div>
+    </div>
+    <p style="padding-top:5px"></p>
+    <div class="mode_selector">
+      <select name="mode" id="mode" disabled>
+        <option value="OFF">Demod Off</option>
+        <option value="RAW">Raw I/Q</option>
+        <option value="AM">AM</option>
+        <option value="AMS">AM-Sync</option>
+        <option value="LSB">LSB</option>
+        <option value="USB">USB</option>
+        <option value="CWL">CW-L</option>
+        <option value="CWU">CW-U</option>
+        <option value="FM">Narrow FM</option>
+        <option value="WFM">WFM</option>
+        <option value="WFM_ST">WFM (stereo)</option>
+        <option value="WFM_ST_OIRT">WFM (orit)</option>
+      </select>
+      <input type="radio" id="knob_mode" name="knob_mode" value="mode" />
+    </div>
+  </div>
+
+
+
+  <div id="Settings" class="tabcontent">
+    <div class="ipaddr">
+      <input type="number" id="ip1" name="ip1" min="0" max="255" value="0"> .
+      <input type="number" id="ip2" name="ip2" min="0" max="255" value="0"> .
+      <input type="number" id="ip3" name="ip3" min="0" max="255" value="0"> .
+      <input type="number" id="ip4" name="hz4" min="0" max="255" value="0">
+    </div>
+    <input type="checkbox" id="autorefresh" name="autorefresh" />test
+  </div>
+</body>
+
+</html>
