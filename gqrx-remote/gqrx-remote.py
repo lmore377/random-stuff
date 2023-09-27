@@ -1,7 +1,6 @@
 import socket
 import json
 import traceback
-from urllib.parse import urlparse
 
 # Define hosts and ports
 SERVER_HOST = "0.0.0.0"
@@ -13,7 +12,6 @@ server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind((SERVER_HOST, SERVER_PORT))
 server.listen(1)
 print("Listening on port %s ..." % SERVER_PORT)
-
 
 def get(param):
     if param == "freq":
@@ -72,6 +70,13 @@ def set(param, value):
         client.sendall(bytes("L SQL " + value, encoding="utf-8"))
         data = client.recv(1024).decode("utf-8").rstrip("\n")
         ret = json.dumps({"param": param, "value": data})
+    elif param == "sysBL":
+        f = open("/sys/class/backlight/aml-bl/brightness", "w")
+        BL = round((((int(value) - 1) * (50 - 254)) / (204 - 1)) + 254)
+        print(str(BL))
+        f.write(str(BL))
+        f.close()
+        ret = json.dumps({"param": param, "value": value})
     else:
         ret = "Invalid SET"
     return ret
@@ -133,4 +138,3 @@ s.sendall(b"f\n")
 data = s.recv(1024)
 s.close()
 print("Received", repr(data))
-
