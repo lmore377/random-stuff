@@ -1,5 +1,19 @@
 freq = 0
 backend_host = "127.0.0.1"
+
+function sysBL() {
+  val = document.getElementById("sys_bl").value
+  fetch('http://' + backend_host + ':8000/set', {
+    method: 'POST',
+    body: JSON.stringify({
+      param: 'sysBL',
+      value: val
+    })
+  })
+    .then(response => response.json())
+    .then(json => console.log(json));
+}
+
 function knobFreq(event) {
   const delta = Math.sign(event.deltaX);
   fnum = document.querySelector('input[name="freq_digit"]:checked').value;
@@ -15,8 +29,6 @@ function knobFreq(event) {
     document.getElementById("freq_display").value = padded;
   }
   out = document.getElementById("freq_display").value;
-  console.log(freq);
-  console.log(fnum);
   fetch('http://' + backend_host + ':8000/set', {
     method: 'POST',
     body: JSON.stringify({
@@ -40,9 +52,7 @@ function knobMode(event) {
       select.options.selectedIndex--;
     }
   }
-  console.log(select.options.selectedIndex);
   out = document.getElementById("freq_display").value;
-  console.log(select.value);
   fetch('http://' + backend_host + ':8000/set', {
     method: 'POST',
     body: JSON.stringify({
@@ -54,6 +64,19 @@ function knobMode(event) {
     .then(json => console.log(json));
 }
 
+function knobSysBL(event) {
+  const delta = Math.sign(event.deltaX);
+  val = document.getElementById("sys_bl").value;
+  if (delta == -1) {
+    if (val >= 1) {
+      document.getElementById("sys_bl").value = parseInt(val) - parseInt(3);
+    }
+  } else {
+    document.getElementById("sys_bl").value = parseInt(val) + parseInt(4);
+  }
+  sysBL();
+}
+
 window.addEventListener("wheel", event => {
   knob_mode = document.querySelector('input[name="knob_mode"]:checked').value;
   if (knob_mode == "freq") {
@@ -61,13 +84,14 @@ window.addEventListener("wheel", event => {
   }
   else if (knob_mode == "mode") {
     knobMode(event);
-    console.log("z");
+  }
+  else if (knob_mode == "sysbl_knob") {
+    knobSysBL(event);
   }
 });
 
 window.addEventListener("change", event => {
   if (event.target.name == "mode") {
-    console.log(event);
     mode = event.target.value;
     fetch('http://' + backend_host + ':8000/set', {
       method: 'POST',
