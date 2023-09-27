@@ -9,12 +9,13 @@
 <body>
   <div class="tab">
     <button class="tablinks" onclick="switchTab(event, 'Controls')">Controls</button>
-    <button class="tablinks" onclick="switchTab(event, 'Settings')">Settings</button>
+    <button class="tablinks active" onclick="switchTab(event, 'Settings')">Settings</button>
   </div>
-  <div id="Controls" class="tabcontent">
+
+  <div id="Controls" class="tabcontent" style="display: none;">
     <div class="freq_sel_disp">
-      <input type="number" id="freq_display" value="0000000000" style="width: 450px;" disabled><input type="radio"
-        id="knob_freq" name="knob_mode" value="freq" checked />
+      <input type="radio" id="knob_freq" name="knob_mode" value="freq" checked="">
+      <input type="number" id="freq_display" value="0000000000" style="width: 450px;" disabled>
       <div class="freq_select">
         <input type="radio" id="f10" name="freq_digit" value="1000000000">
         <input type="radio" id="f9" name="freq_digit" value="100000000">
@@ -25,12 +26,12 @@
         <input type="radio" id="f4" name="freq_digit" value="1000">
         <input type="radio" id="f3" name="freq_digit" value="100">
         <input type="radio" id="f2" name="freq_digit" value="10">
-        <input type="radio" id="f1" name="freq_digit" value="1" checked />
+        <input type="radio" id="f1" name="freq_digit" value="1" checked="">
       </div>
     </div>
     <p style="padding-top:5px"></p>
     <div class="mode_selector">
-      <select name="mode" id="mode" disabled>
+      <select name="mode" id="mode" disabled="">
         <option value="OFF">Demod Off</option>
         <option value="RAW">Raw I/Q</option>
         <option value="AM">AM</option>
@@ -44,21 +45,31 @@
         <option value="WFM_ST">WFM (stereo)</option>
         <option value="WFM_ST_OIRT">WFM (orit)</option>
       </select>
-      <input type="radio" id="knob_mode" name="knob_mode" value="mode" />
+      <input type="radio" id="knob_mode" name="knob_mode" value="mode">
     </div>
   </div>
 
-
-
-  <div id="Settings" class="tabcontent">
+  <div id="Settings" class="tabcontent" style="display: block;">
     <div class="ipaddr">
-      <input type="number" id="ip1" name="ip1" min="0" max="255" value="0"> .
-      <input type="number" id="ip2" name="ip2" min="0" max="255" value="0"> .
-      <input type="number" id="ip3" name="ip3" min="0" max="255" value="0"> .
-      <input type="number" id="ip4" name="hz4" min="0" max="255" value="0">
+      <input type="number" id="ip1" name="ip1" min="0" max="255" value="10" disabled=""> .
+      <input type="number" id="ip2" name="ip2" min="0" max="255" value="42" disabled=""> .
+      <input type="number" id="ip3" name="ip3" min="0" max="255" value="0" disabled=""> .
+      <input type="number" id="ip4" name="hz4" min="0" max="255" value="1" disabled="">
+      <div class="ipradios">
+        <input type="radio" id="ip1" name="knob_mode" checked="">
+        <input type="radio" id="ip2" name="knob_mode">
+        <input type="radio" id="ip3" name="knob_mode">
+        <input type="radio" id="ip4" name="knob_mode">
+      </div>
+      <input type="button" value="Connect" onclick="console.log('cum')" style="float: right; margin: 0px 25.5px;">
     </div>
-    <input type="checkbox" id="autorefresh" name="autorefresh" />test
+    <input type="checkbox" id="autorefresh" name="autorefresh">Autorefresh <br><br>
+    <div>
+    🔆<input type="range" id="sys_bl" min="1" max="204" value="102" class="brightness" onchange="sysBL()">
+    <input type="radio" id="knob_sysbl" name="knob_mode" value="sysbl_knob">
+    <input type="checkbox" id="autoBL" name="autoBL">
   </div>
+
 </body>
 
 </html>
