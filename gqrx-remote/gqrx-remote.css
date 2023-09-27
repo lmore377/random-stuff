@@ -15,35 +15,30 @@ input[type="number"] {
   text-align: center;
 }
 
-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  padding-left: 20px;
-  text-overflow: '';
-}
-
 #freq_display {
-  margin: 0px 6px;
   letter-spacing: 23.5px;
   text-align: right;
-  padding-left: 9px;
 }
 
 .freq_select {
-  padding-left: 62px;
+  padding-left: 82.5px;
 }
 
 .freq_select * {
   margin: 0px 5.5px;
 }
 
-.ipaddr * {
-  font-size: 15px;
-  padding-left: 1px;
-  padding-right: 1px;
+.ipaddr input[type=number] {
+  margin: 0px 19px;
+  font-size: 20px;
+}
+.ipradios * {
+  margin: 0px 51.5px;
 }
 
+
+
+/* For tabs */
 .tab {
   overflow: hidden;
 }
