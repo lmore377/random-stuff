@@ -8,7 +8,7 @@ This code is very bad and should not be used in a real world application without
 ## Usage
 `obex.py` is where the bulk of the code is. See `test.py` for an example of usage and important information.
 
-In order for this to work on Android, the device running this code needs to be an audio sink.
+In order for this to work when connecting to an Android device, the device running this code needs to be an audio sink.
 It also needs to advertise AVRCP 1.6 and Cover Art compatibility. BlueZ needs to be patched to advertise those 2 things and for that you can find a *very bad* patch in `bluez-avrcp-patch.patch`. 
 This will likely fail to apply but it should give you an idea of what needs to be changed.
 
