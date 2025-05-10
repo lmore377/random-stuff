@@ -1,0 +1,61 @@
+diff --git profiles/audio/avrcp.c profiles/audio/avrcp.c
+index 9fe8f55e5..57d3b0e28 100644
+--- profiles/audio/avrcp.c
++++ profiles/audio/avrcp.c
+@@ -138,7 +138,7 @@
+ 
+ #define AVRCP_BROWSING_TIMEOUT         1
+ #define AVRCP_CT_VERSION               0x0106
+-#define AVRCP_TG_VERSION               0x0105
++#define AVRCP_TG_VERSION               0x0106
+ 
+ #define AVRCP_SCOPE_MEDIA_PLAYER_LIST                  0x00
+ #define AVRCP_SCOPE_MEDIA_PLAYER_VFS                   0x01
+@@ -498,7 +498,8 @@ static sdp_record_t *avrcp_tg_record(bool browsing)
+                                        AVRCP_FEATURE_CATEGORY_2 |
+                                        AVRCP_FEATURE_CATEGORY_3 |
+                                        AVRCP_FEATURE_CATEGORY_4 |
+-                                       AVRCP_FEATURE_TG_PLAYER_SETTINGS);
++                                       AVRCP_FEATURE_TG_PLAYER_SETTINGS|
++                                       AVRCP_FEATURE_TG_COVERT_ART);
+ 
+        record = sdp_record_alloc();
+        if (!record)
+@@ -2504,7 +2505,7 @@ static gboolean avrcp_get_element_attributes_rsp(struct avctp *conn,
+ 
+ static void avrcp_get_element_attributes(struct avrcp *session)
+ {
+-       uint8_t buf[AVRCP_HEADER_LENGTH + 9];
++       uint8_t buf[AVRCP_HEADER_LENGTH + 41];
+        struct avrcp_header *pdu = (void *) buf;
+        uint16_t length;
+ 
+@@ -2512,8 +2513,17 @@ static void avrcp_get_element_attributes(struct avrcp *session)
+ 
+        set_company_id(pdu->company_id, IEEEID_BTSIG);
+        pdu->pdu_id = AVRCP_GET_ELEMENT_ATTRIBUTES;
+-       pdu->params_len = cpu_to_be16(9);
++       pdu->params_len = cpu_to_be16(41);
+        pdu->packet_type = AVRCP_PACKET_TYPE_SINGLE;
++       pdu->params[8] = 0x08;
++       pdu->params[12] = 0x01;
++       pdu->params[16] = 0x02;
++       pdu->params[20] = 0x03;
++       pdu->params[24] = 0x04;
++       pdu->params[28] = 0x05;
++       pdu->params[32] = 0x06;
++       pdu->params[36] = 0x07;
++       pdu->params[40] = 0x08;
+ 
+        length = AVRCP_HEADER_LENGTH + be16_to_cpu(pdu->params_len);
+ 
+@@ -3825,7 +3835,8 @@ static void avrcp_track_changed(struct avrcp *session,
+        if (session->browsing_id) {
+                struct avrcp_player *player = session->controller->player;
+                player->uid = get_be64(&pdu->params[1]);
+-               avrcp_get_item_attributes(session, player->uid);
++               //avrcp_get_item_attributes(session, player->uid);
++               avrcp_get_element_attributes(session);
+        } else
+                avrcp_get_element_attributes(session);
+ }
